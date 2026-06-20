@@ -152,6 +152,10 @@ button,.btn{font:inherit;cursor:pointer}
 .tag{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border);color:var(--navy);font-size:13px;font-weight:500;padding:6px 12px;border-radius:999px;box-shadow:var(--shadow)}
 .tag-dot{width:8px;height:8px;border-radius:50%;background:var(--green)}
 h1{font-size:clamp(36px,5vw,60px);line-height:1.05;letter-spacing:-.02em;font-weight:700;margin:18px 0 18px;color:var(--navy)}
+.headline-static{display:block;color:var(--navy)}
+.headline-rotate{display:block;color:var(--green);min-height:1.15em}
+.typewriter-cursor{display:inline-block;width:4px;height:.82em;background:var(--green);margin-left:3px;vertical-align:middle;animation:tw-blink .75s step-end infinite}
+@keyframes tw-blink{0%,100%{opacity:1}50%{opacity:0}}
 .lead{font-size:19px;color:#3a475c;margin:0 0 32px;max-width:560px}
 .hero-cta{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
 .text-link{color:var(--navy);font-weight:600;font-size:15px;border-bottom:2px solid var(--green);padding-bottom:2px}
@@ -375,7 +379,7 @@ section{padding:96px 0}
   <div class="container hero-grid">
     <div>
       <span class="tag"><span class="tag-dot"></span> Part of the LeaderHQ suite</span>
-      <h1>Scheduling built for leaders.</h1>
+      <h1><span class="headline-static">Scheduling built for</span><span class="headline-rotate"><span id="tw-text"></span><span class="typewriter-cursor" aria-hidden="true"></span></span></h1>
       <p class="lead">LeaderCal turns availability into action. Booking pages, team round-robin, executive event types, and calendar sync — wired into the tools your team already uses.</p>
       <div class="hero-cta">
         <a href="#pricing" class="btn-primary">Get started free <span aria-hidden="true">→</span></a>
@@ -742,6 +746,29 @@ section{padding:96px 0}
   }
   applyActive();
   window.addEventListener('hashchange', applyActive);
+})();
+</script>
+<script>
+(function(){
+  var PHRASES=['leaders.','field leaders.','fast movers.','top closers.','your whole team.'];
+  var SPEED_TYPE=68,SPEED_DELETE=36,PAUSE_AFTER=2200,PAUSE_BEFORE=380;
+  var el=document.getElementById('tw-text');
+  if(!el)return;
+  var phraseIdx=0,charIdx=0,deleting=false;
+  function tick(){
+    var phrase=PHRASES[phraseIdx];
+    if(!deleting){
+      charIdx++;
+      el.textContent=phrase.slice(0,charIdx);
+      if(charIdx===phrase.length){deleting=true;setTimeout(tick,PAUSE_AFTER);return;}
+    }else{
+      charIdx--;
+      el.textContent=phrase.slice(0,charIdx);
+      if(charIdx===0){deleting=false;phraseIdx=(phraseIdx+1)%PHRASES.length;setTimeout(tick,PAUSE_BEFORE);return;}
+    }
+    setTimeout(tick,deleting?SPEED_DELETE:SPEED_TYPE);
+  }
+  setTimeout(tick,600);
 })();
 </script>
 </body>
